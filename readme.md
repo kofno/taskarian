@@ -36,4 +36,4 @@ could, for example, return a task from a Redux reducer, if that's your thing.
 
 # docs
 
-[API](https://kofno.github.io/maybeasy)
+[API](https://kofno.github.io/taskade)
