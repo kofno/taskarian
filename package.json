@@ -1,0 +1,21 @@
+{
+  "name": "taskade",
+  "version": "1.0.0",
+  "description": "A future implementation in TypeScript",
+  "main": "dist/index.js",
+  "author": "Ryan L. Bell <ryan.l.bell@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "docs": "typedoc --out docs --theme minimal",
+    "test": "ts-node node_modules/tape/bin/tape tests/**/*.ts | tap-spec"
+  },
+  "devDependencies": {
+    "@types/tape": "^4.2.29",
+    "tap-spec": "^4.1.1",
+    "tape": "^4.6.3",
+    "ts-node": "^3.0.2",
+    "tslint": "^5.1.0",
+    "typedoc": "^0.5.10",
+    "typescript": "^2.2.2"
+  }
+}
