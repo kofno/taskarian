@@ -1,4 +1,4 @@
-# taskade
+# taskarian
 
 A Task (Future) implementation in TypeScript. Useful for managing asynchronous tasks
 that may fail.
@@ -10,13 +10,13 @@ could, for example, return a task from a Redux reducer, if that's your thing.
 
 # install
 
-> npm install --save taskade
+> npm install --save taskarian
 
-> yarn add taskade
+> yarn add taskarian
 
 # usage
 
-    import Task from 'taskade';
+    import Task from 'taskarian';
 
     function parse(s) {
       return new Task(function(reject, resolve) {
@@ -25,7 +25,7 @@ could, for example, return a task from a Redux reducer, if that's your thing.
         }
         catch(e) {
           reject(e.message);
-        }        
+        }
       });
     }
 
@@ -36,4 +36,4 @@ could, for example, return a task from a Redux reducer, if that's your thing.
 
 # docs
 
-[API](https://kofno.github.io/taskade)
+[API](https://kofno.github.io/taskarian)

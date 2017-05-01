@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>taskade | taskade</title>
+	<title>taskarian | taskarian</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<style type="text/css">/*! normalize.css v1.1.3 | MIT License | git.io/normalize */
@@ -879,7 +879,7 @@ img { max-width: 100%; }
 		<div class="container">
 			<div class="table-wrap">
 				<div class="table-cell">
-					<strong>taskade</strong>
+					<strong>taskarian</strong>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -914,7 +914,7 @@ img { max-width: 100%; }
 <div class="container container-main">
 	<div class="content-wrap">
 		<div class="tsd-panel tsd-typography">
-			<h1 id="taskade">taskade</h1>
+			<h1 id="taskarian">taskarian</h1>
 			<p>A Task (Future) implementation in TypeScript. Useful for managing asynchronous tasks
 			that may fail.</p>
 			<p>A Task is different then a Promise because it is lazy, rather then eager. A Promise
@@ -923,11 +923,11 @@ img { max-width: 100%; }
 			could, for example, return a task from a Redux reducer, if that&#39;s your thing.</p>
 			<h1 id="install">install</h1>
 			<blockquote>
-				<p>npm install --save taskade</p>
-				<p>yarn add taskade</p>
+				<p>npm install --save taskarian</p>
+				<p>yarn add taskarian</p>
 			</blockquote>
 			<h1 id="usage">usage</h1>
-			<pre><code><span class="hljs-keyword">import</span> Task <span class="hljs-keyword">from</span> <span class="hljs-string">'taskade'</span>;
+			<pre><code><span class="hljs-keyword">import</span> Task <span class="hljs-keyword">from</span> <span class="hljs-string">'taskarian'</span>;
 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">parse</span>(<span class="hljs-params">s</span>) </span>{
   <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Task(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">reject, resolve</span>) </span>{
@@ -936,7 +936,7 @@ img { max-width: 100%; }
     }
     <span class="hljs-keyword">catch</span>(e) {
       reject(e.message);
-    }        
+    }
   });
 }
 
@@ -945,7 +945,7 @@ parse(<span class="hljs-string">'foo'</span>).fork(
   <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">value</span>) </span>{ <span class="hljs-built_in">console</span>.log(value) }
 );
 </code></pre><h1 id="docs">docs</h1>
-			<p><a href="https://kofno.github.io/maybeasy">API</a></p>
+			<p><a href="https://kofno.github.io/taskarian">API</a></p>
 		</div>
 		<div style="position:relative;"><a name="typedoc-main-index" class="tsd-anchor"></a></div>
 		<section class="tsd-panel-group tsd-index-group">

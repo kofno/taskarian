@@ -1,13 +1,13 @@
 {
-  "name": "taskade",
-  "version": "1.0.1",
+  "name": "taskarian",
+  "version": "1.0.0",
   "description": "A future implementation in TypeScript",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan L. Bell <ryan.l.bell@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "docs": "typedoc --out docs --theme minimal",
+    "docs": "typedoc --out docs --theme minimal && touch docs/.nojekyll",
     "test": "ts-node node_modules/tape/bin/tape tests/**/*.ts | tap-spec"
   },
   "devDependencies": {
