@@ -34,6 +34,22 @@ could, for example, return a task from a Redux reducer, if that's your thing.
       function(value) { console.log(value) }
     );
 
+It is also possible to cancel a task, if the task supports it:
+
+    import Task, { Resolve } from 'taskarian';
+
+    const cancellable = new Task((reject, resolve: Resolve<string>) => {
+      const x = setTimeout(() => resolve('Yo!'), 3000);
+      return () => clearTimeout(x);
+    });
+
+    const cancel = task.fork(
+      err => console.error(err),
+      s => console.warn(`Task should never have finished; ${s}`),
+    );
+
+    cancel();
+
 # docs
 
 [API](https://kofno.github.io/taskarian)
