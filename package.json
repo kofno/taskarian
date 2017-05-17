@@ -1,6 +1,6 @@
 {
   "name": "taskarian",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "A future implementation in TypeScript",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
