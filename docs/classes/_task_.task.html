@@ -941,14 +941,20 @@ img { max-width: 100%; }
 				</li>
 			</ul>
 		</li>
-		<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-not-exported">
+		<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
+			<a href="../modules/_task_.html#cancel" class="tsd-kind-icon">Cancel</a>
+		</li>
+		<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
 			<a href="../modules/_task_.html#computation" class="tsd-kind-icon">Computation</a>
 		</li>
-		<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-not-exported">
+		<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
 			<a href="../modules/_task_.html#reject" class="tsd-kind-icon">Reject</a>
 		</li>
-		<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-not-exported">
+		<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
 			<a href="../modules/_task_.html#resolve" class="tsd-kind-icon">Resolve</a>
+		</li>
+		<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+			<a href="../modules/_task_.html#noop" class="tsd-kind-icon">noop</a>
 		</li>
 	</ul>
 </nav>
@@ -1016,7 +1022,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/taskade/blob/1ea1ce9/src/Task.ts#L20">Task.ts:20</a></li>
+								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/4ce1b20/src/Task.ts#L26">Task.ts:26</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1038,7 +1044,7 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">fn<span class="tsd-signature-symbol">:</span> <a href="../modules/_task_.html#computation" class="tsd-signature-type">Computation</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">E</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/kofno/taskade/blob/1ea1ce9/src/Task.ts#L20">Task.ts:20</a></li>
+						<li>Defined in <a href="https://github.com/kofno/taskarian/blob/4ce1b20/src/Task.ts#L26">Task.ts:26</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -1055,7 +1061,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/taskade/blob/1ea1ce9/src/Task.ts#L36">Task.ts:36</a></li>
+								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/4ce1b20/src/Task.ts#L52">Task.ts:52</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -1096,15 +1102,26 @@ img { max-width: 100%; }
 				<a name="fork" class="tsd-anchor"></a>
 				<h3>fork</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">fork<span class="tsd-signature-symbol">(</span>reject<span class="tsd-signature-symbol">: </span><a href="../modules/_task_.html#reject" class="tsd-signature-type">Reject</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">E</span><span class="tsd-signature-symbol">&gt;</span>, resolve<span class="tsd-signature-symbol">: </span><a href="../modules/_task_.html#resolve" class="tsd-signature-type">Resolve</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					<li class="tsd-signature tsd-kind-icon">fork<span class="tsd-signature-symbol">(</span>reject<span class="tsd-signature-symbol">: </span><a href="../modules/_task_.html#reject" class="tsd-signature-type">Reject</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">E</span><span class="tsd-signature-symbol">&gt;</span>, resolve<span class="tsd-signature-symbol">: </span><a href="../modules/_task_.html#resolve" class="tsd-signature-type">Resolve</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/_task_.html#cancel" class="tsd-signature-type">Cancel</a></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/taskade/blob/1ea1ce9/src/Task.ts#L26">Task.ts:26</a></li>
+								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/4ce1b20/src/Task.ts#L42">Task.ts:42</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Run the task. If the task fails, the reject function is called, and passed
+									the error. If the task succeeds, then the resolve function is called with
+								the task result.</p>
+							</div>
+							<p>The fork function also returns a Cancel function. Calling the cancel
+								function will abort the task, provided that the task actually supports
+								cancelling. <code>succeed</code> and <code>fail</code>, for example, return the cancel function,
+							but it is a No Op, since those tasks resolve immediately.</p>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
@@ -1114,7 +1131,7 @@ img { max-width: 100%; }
 								<h5>resolve: <a href="../modules/_task_.html#resolve" class="tsd-signature-type">Resolve</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
 							</li>
 						</ul>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						<h4 class="tsd-returns-title">Returns <a href="../modules/_task_.html#cancel" class="tsd-signature-type">Cancel</a></h4>
 					</li>
 				</ul>
 			</section>
@@ -1128,7 +1145,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/taskade/blob/1ea1ce9/src/Task.ts#L30">Task.ts:30</a></li>
+								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/4ce1b20/src/Task.ts#L46">Task.ts:46</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -1175,7 +1192,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/taskade/blob/1ea1ce9/src/Task.ts#L48">Task.ts:48</a></li>
+								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/4ce1b20/src/Task.ts#L64">Task.ts:64</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -1222,7 +1239,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/taskade/blob/1ea1ce9/src/Task.ts#L42">Task.ts:42</a></li>
+								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/4ce1b20/src/Task.ts#L58">Task.ts:58</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -1269,7 +1286,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/taskade/blob/1ea1ce9/src/Task.ts#L14">Task.ts:14</a></li>
+								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/4ce1b20/src/Task.ts#L19">Task.ts:19</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -1301,7 +1318,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/taskade/blob/1ea1ce9/src/Task.ts#L8">Task.ts:8</a></li>
+								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/4ce1b20/src/Task.ts#L12">Task.ts:12</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
