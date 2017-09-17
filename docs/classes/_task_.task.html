@@ -1030,7 +1030,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/fd49ba6/src/Task.ts#L40">Task.ts:40</a></li>
+								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/3b9d460/src/Task.ts#L40">Task.ts:40</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1052,7 +1052,7 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">fn<span class="tsd-signature-symbol">:</span> <a href="../modules/_task_.html#computation" class="tsd-signature-type">Computation</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">E</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/kofno/taskarian/blob/fd49ba6/src/Task.ts#L40">Task.ts:40</a></li>
+						<li>Defined in <a href="https://github.com/kofno/taskarian/blob/3b9d460/src/Task.ts#L40">Task.ts:40</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -1069,7 +1069,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/fd49ba6/src/Task.ts#L72">Task.ts:72</a></li>
+								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/3b9d460/src/Task.ts#L72">Task.ts:72</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1121,7 +1121,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/fd49ba6/src/Task.ts#L96">Task.ts:96</a></li>
+								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/3b9d460/src/Task.ts#L96">Task.ts:96</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1135,7 +1135,7 @@ img { max-width: 100%; }
 							<pre><code>Task.succeed(<span class="hljs-string">'https://jsonplaceholder.typicode.com/posts/1'</span>)
   .andThenP(fetch)
   .andThenP(<span class="hljs-function"><span class="hljs-params">result</span> =&gt;</span> result.json())
-  .andThen(<span class="hljs-function"><span class="hljs-params">obj</span> =&gt;</span> someDecoder.decodeAny(obj))
+  .andThen(<span class="hljs-function"><span class="hljs-params">obj</span> =&gt;</span> someDecoder.decodeAny(obj).cata(Err: Task.fail, Ok: Task.succeed))
   .fork(
     <span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> <span class="hljs-string">`You died: <span class="hljs-subst">${err}</span>`</span>,
     <span class="hljs-function"><span class="hljs-params">someThing</span> =&gt;</span> doSomethingAwesomeHereWithThis(someThing)
@@ -1186,7 +1186,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/fd49ba6/src/Task.ts#L56">Task.ts:56</a></li>
+								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/3b9d460/src/Task.ts#L56">Task.ts:56</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1223,7 +1223,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/fd49ba6/src/Task.ts#L63">Task.ts:63</a></li>
+								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/3b9d460/src/Task.ts#L63">Task.ts:63</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1275,7 +1275,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/fd49ba6/src/Task.ts#L114">Task.ts:114</a></li>
+								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/3b9d460/src/Task.ts#L114">Task.ts:114</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1327,7 +1327,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/fd49ba6/src/Task.ts#L105">Task.ts:105</a></li>
+								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/3b9d460/src/Task.ts#L105">Task.ts:105</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1379,7 +1379,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/fd49ba6/src/Task.ts#L23">Task.ts:23</a></li>
+								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/3b9d460/src/Task.ts#L23">Task.ts:23</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1416,7 +1416,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/fd49ba6/src/Task.ts#L33">Task.ts:33</a></li>
+								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/3b9d460/src/Task.ts#L33">Task.ts:33</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1465,7 +1465,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/fd49ba6/src/Task.ts#L13">Task.ts:13</a></li>
+								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/3b9d460/src/Task.ts#L13">Task.ts:13</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">

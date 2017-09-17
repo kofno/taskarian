@@ -87,7 +87,7 @@ class Task<E, T> {
    *     Task.succeed('https://jsonplaceholder.typicode.com/posts/1')
    *       .andThenP(fetch)
    *       .andThenP(result => result.json())
-   *       .andThen(obj => someDecoder.decodeAny(obj))
+   *       .andThen(obj => someDecoder.decodeAny(obj).cata(Err: Task.fail, Ok: Task.succeed))
    *       .fork(
    *         err => `You died: ${err}`,
    *         someThing => doSomethingAwesomeHereWithThis(someThing)
