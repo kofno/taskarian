@@ -12,7 +12,9 @@
   },
   "scripts": {
     "docs": "typedoc --out docs --theme minimal && touch docs/.nojekyll",
-    "test": "ts-node node_modules/tape/bin/tape tests/**/*.ts | tap-spec"
+    "test": "ts-node node_modules/tape/bin/tape tests/**/*.ts | tap-spec",
+    "build": "tsc",
+    "watch": "tsc -w"
   },
   "devDependencies": {
     "@types/tape": "^4.2.29",

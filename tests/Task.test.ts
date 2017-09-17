@@ -23,62 +23,62 @@ test('Task.fail', t => {
 });
 
 test('Task.map', t => {
-  Task.succeed(42).map(v => v - 12).fork(
-    _ => t.fail('Task should always succeed'),
-    result => t.pass(`Task succeeded with ${result}`),
-  );
+  Task.succeed(42)
+    .map(v => v - 12)
+    .fork(
+      _ => t.fail('Task should always succeed'),
+      result => t.pass(`Task succeeded with ${result}`),
+    );
 
-  Task.fail('Opps!').map(_ => t.fail('map should never run')).fork(
-    err => t.pass(`Task errored with ${err}`),
-    _ => t.fail('Task should have failed'),
-  );
+  Task.fail('Opps!')
+    .map(_ => t.fail('map should never run'))
+    .fork(err => t.pass(`Task errored with ${err}`), _ => t.fail('Task should have failed'));
 
   t.end();
 });
 
 test('Task.andThen', t => {
-  Task.succeed(42).andThen(v => Task.succeed(v - 12)).fork(
-    err => t.fail('Task should have succeeded'),
-    v => t.pass(`Task succeeded with ${v}`),
-  );
+  Task.succeed(42)
+    .andThen(v => Task.succeed(v - 12))
+    .fork(err => t.fail('Task should have succeeded'), v => t.pass(`Task succeeded with ${v}`));
 
-  Task.succeed(42).andThen(v => Task.fail('Ooops!')).fork(
-    err => t.pass(`Task failed with ${err}`),
-    _ => t.fail('Task should have failed'),
-  );
+  Task.succeed(42)
+    .andThen(v => Task.fail('Ooops!'))
+    .fork(err => t.pass(`Task failed with ${err}`), _ => t.fail('Task should have failed'));
 
-  Task.fail('Oops!').andThen(_ => Task.succeed(42)).fork(
-    err => t.pass(`Task failed with ${err}`),
-    _ => t.fail('Task should have failed'),
-  );
+  Task.fail('Oops!')
+    .andThen(_ => Task.succeed(42))
+    .fork(err => t.pass(`Task failed with ${err}`), _ => t.fail('Task should have failed'));
 
   t.end();
 });
 
 test('Task.orElse', t => {
-  Task.fail('Oops!').orElse(e => Task.fail(e.toUpperCase())).fork(
-    err => t.pass(`Task failed with ${err}`),
-    _ => t.fail('Task should have failed'),
-  );
+  Task.fail('Oops!')
+    .orElse(e => Task.fail(e.toUpperCase()))
+    .fork(err => t.pass(`Task failed with ${err}`), _ => t.fail('Task should have failed'));
 
-  Task.fail('Oops!').orElse(e => Task.succeed(e)).fork(
-    err => t.fail('Task should have become a success'),
-    v => t.pass(`Task succeeded with ${v}`),
-  );
+  Task.fail('Oops!')
+    .orElse(e => Task.succeed(e))
+    .fork(
+      err => t.fail('Task should have become a success'),
+      v => t.pass(`Task succeeded with ${v}`),
+    );
 
-  Task.succeed(42).orElse(e => Task.fail('WAT!?')).fork(
-    err => t.fail('Task should have succeeded'),
-    v => t.pass(`Task succeeded with ${v}`),
-  );
+  Task.succeed(42)
+    .orElse(e => Task.fail('WAT!?'))
+    .fork(err => t.fail('Task should have succeeded'), v => t.pass(`Task succeeded with ${v}`));
 
   t.end();
 });
 
 test('Task.mapError', t => {
-  Task.fail('Oops!').mapError(e => e.toUpperCase()).fork(
-    err => t.equal('OOPS!', err, `Task failed with ${err}`),
-    _ => t.fail('Task should have failed'),
-  );
+  Task.fail('Oops!')
+    .mapError(e => e.toUpperCase())
+    .fork(
+      err => t.equal('OOPS!', err, `Task failed with ${err}`),
+      _ => t.fail('Task should have failed'),
+    );
 
   t.end();
 });
@@ -106,12 +106,14 @@ test('Cancel mapped task', t => {
 });
 
 test('Cancel sequenced tasks', t => {
-  const task = cancellable.andThen(s =>
-    new Task((reject, resolve) => {
-      resolve(s.toUpperCase());
-      // tslint:disable-next-line:no-empty
-      return () => { };
-    }));
+  const task = cancellable.andThen(
+    s =>
+      new Task((reject, resolve) => {
+        resolve(s.toUpperCase());
+        // tslint:disable-next-line:no-empty
+        return () => {};
+      }),
+  );
 
   const cancel = task.fork(
     err => t.fail(`Task should not have failed; ${err}`),
@@ -123,17 +125,51 @@ test('Cancel sequenced tasks', t => {
 });
 
 test('Cancel sequenced asynced tasks', t => {
-  const task = cancellable.andThen(s =>
-    new Task((reject, resolve) => {
-      const x = setTimeout(() => resolve(s.toUpperCase()), 3000);
-      return () => clearTimeout(x);
-    }));
+  const task = cancellable.andThen(
+    s =>
+      new Task((reject, resolve) => {
+        const x = setTimeout(() => resolve(s.toUpperCase()), 3000);
+        return () => clearTimeout(x);
+      }),
+  );
 
   const cancel = task.fork(
     err => t.fail(`Task should not have failed; ${err}`),
     s => t.fail(`Task should never have finished; ${s}`),
   );
   cancel();
+
+  t.end();
+});
+
+test('Promises', t => {
+  Task.fromPromise(() => Promise.resolve(42))
+    .map(n => n + 8)
+    .fork(
+      err => t.fail(`Task should have succeeded: ${err}`),
+      n => t.assert(n === 50, 'Promise converted to task'),
+    );
+
+  Task.fromPromise(() => Promise.reject<number>('whoops!'))
+    .map(n => n + 8)
+    .fork(
+      err => t.pass(`Task handled a failed promise. Error: ${err}`),
+      n => t.fail(`Task should not have succeeded: ${n}`),
+    );
+
+  Task.succeed(42)
+    .andThenP(n => Promise.resolve(n + 8))
+    .fork(
+      err => t.fail(`Promise should have resolved as a successful task: ${err}`),
+      n => t.assert(50 === n, 'Promise chained as a task'),
+    );
+
+  Task.succeed(42)
+    .andThenP(n => Promise.reject('Whoops!'))
+    .fork(
+      err => t.pass(`Promise failure chained as task. Error ${err}`),
+      n => t.fail(`Promise chain should not have succeeded: ${n}`),
+    );
 
   t.end();
 });

@@ -921,6 +921,9 @@ img { max-width: 100%; }
 				<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
 					<a href="_task_.task.html#andthen" class="tsd-kind-icon">and<wbr>Then</a>
 				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+					<a href="_task_.task.html#andthenp" class="tsd-kind-icon">and<wbr>ThenP</a>
+				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
 					<a href="_task_.task.html#fork" class="tsd-kind-icon">fork</a>
 				</li>
@@ -935,6 +938,9 @@ img { max-width: 100%; }
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
 					<a href="_task_.task.html#fail" class="tsd-kind-icon">fail</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
+					<a href="_task_.task.html#frompromise" class="tsd-kind-icon">from<wbr>Promise</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
 					<a href="_task_.task.html#succeed" class="tsd-kind-icon">succeed</a>
@@ -999,11 +1005,13 @@ img { max-width: 100%; }
 						<h3>Methods</h3>
 						<ul class="tsd-index-list">
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="_task_.task.html#andthen" class="tsd-kind-icon">and<wbr>Then</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="_task_.task.html#andthenp" class="tsd-kind-icon">and<wbr>ThenP</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="_task_.task.html#fork" class="tsd-kind-icon">fork</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="_task_.task.html#map" class="tsd-kind-icon">map</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="_task_.task.html#maperror" class="tsd-kind-icon">map<wbr>Error</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="_task_.task.html#orelse" class="tsd-kind-icon">or<wbr>Else</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static"><a href="_task_.task.html#fail" class="tsd-kind-icon">fail</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static"><a href="_task_.task.html#frompromise" class="tsd-kind-icon">from<wbr>Promise</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static"><a href="_task_.task.html#succeed" class="tsd-kind-icon">succeed</a></li>
 						</ul>
 					</section>
@@ -1022,7 +1030,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/1f8bc66/src/Task.ts#L26">Task.ts:26</a></li>
+								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/fd49ba6/src/Task.ts#L40">Task.ts:40</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1044,7 +1052,7 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">fn<span class="tsd-signature-symbol">:</span> <a href="../modules/_task_.html#computation" class="tsd-signature-type">Computation</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">E</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/kofno/taskarian/blob/1f8bc66/src/Task.ts#L26">Task.ts:26</a></li>
+						<li>Defined in <a href="https://github.com/kofno/taskarian/blob/fd49ba6/src/Task.ts#L40">Task.ts:40</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -1061,9 +1069,14 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/1f8bc66/src/Task.ts#L52">Task.ts:52</a></li>
+								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/fd49ba6/src/Task.ts#L72">Task.ts:72</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Execute a Task in the context of a successful task. Flatten the result.</p>
+							</div>
+						</div>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
 						<ul class="tsd-type-parameters">
 							<li>
@@ -1098,6 +1111,71 @@ img { max-width: 100%; }
 					</li>
 				</ul>
 			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+				<a name="andthenp" class="tsd-anchor"></a>
+				<h3>and<wbr>ThenP</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+					<li class="tsd-signature tsd-kind-icon">and<wbr>ThenP&lt;A&gt;<span class="tsd-signature-symbol">(</span>f<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_task_.task.html" class="tsd-signature-type">Task</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">E</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/fd49ba6/src/Task.ts#L96">Task.ts:96</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Execute a Promise in the context of a successful task, as though it were
+								a Task. Flatten the result and convert to a Task.</p>
+							</div>
+							<p>In theory, it means that you could take a browser api like <code>fetch</code>, which
+							is promises all the way down, and chain it right into a normal task chain.</p>
+							<p>For example:</p>
+							<pre><code>Task.succeed(<span class="hljs-string">'https://jsonplaceholder.typicode.com/posts/1'</span>)
+  .andThenP(fetch)
+  .andThenP(<span class="hljs-function"><span class="hljs-params">result</span> =&gt;</span> result.json())
+  .andThen(<span class="hljs-function"><span class="hljs-params">obj</span> =&gt;</span> someDecoder.decodeAny(obj))
+  .fork(
+    <span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> <span class="hljs-string">`You died: <span class="hljs-subst">${err}</span>`</span>,
+    <span class="hljs-function"><span class="hljs-params">someThing</span> =&gt;</span> doSomethingAwesomeHereWithThis(someThing)
+  )
+</code></pre>
+						</div>
+						<h4 class="tsd-type-parameters-title">Type parameters</h4>
+						<ul class="tsd-type-parameters">
+							<li>
+								<h4>A</h4>
+							</li>
+						</ul>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>f: <span class="tsd-signature-type">function</span></h5>
+								<ul class="tsd-parameters">
+									<li class="tsd-parameter-siganture">
+										<ul class="tsd-signatures tsd-kind-type-literal">
+											<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>t<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span></li>
+										</ul>
+										<ul class="tsd-descriptions">
+											<li class="tsd-description">
+												<h4 class="tsd-parameters-title">Parameters</h4>
+												<ul class="tsd-parameters">
+													<li>
+														<h5>t: <span class="tsd-signature-type">T</span></h5>
+													</li>
+												</ul>
+												<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span></h4>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <a href="_task_.task.html" class="tsd-signature-type">Task</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">E</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span></h4>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 				<a name="fork" class="tsd-anchor"></a>
 				<h3>fork</h3>
@@ -1108,7 +1186,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/1f8bc66/src/Task.ts#L42">Task.ts:42</a></li>
+								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/fd49ba6/src/Task.ts#L56">Task.ts:56</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1145,9 +1223,14 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/1f8bc66/src/Task.ts#L46">Task.ts:46</a></li>
+								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/fd49ba6/src/Task.ts#L63">Task.ts:63</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Execute a function in the context of a successful task</p>
+							</div>
+						</div>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
 						<ul class="tsd-type-parameters">
 							<li>
@@ -1192,9 +1275,14 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/1f8bc66/src/Task.ts#L64">Task.ts:64</a></li>
+								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/fd49ba6/src/Task.ts#L114">Task.ts:114</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Execute a function in the context of a failed task.</p>
+							</div>
+						</div>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
 						<ul class="tsd-type-parameters">
 							<li>
@@ -1239,9 +1327,14 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/1f8bc66/src/Task.ts#L58">Task.ts:58</a></li>
+								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/fd49ba6/src/Task.ts#L105">Task.ts:105</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Execute a Task in the context of a failed task. Flatten the result.</p>
+							</div>
+						</div>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
 						<ul class="tsd-type-parameters">
 							<li>
@@ -1286,9 +1379,14 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/1f8bc66/src/Task.ts#L19">Task.ts:19</a></li>
+								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/fd49ba6/src/Task.ts#L23">Task.ts:23</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>A Task that always fails. Rejects with <code>err</code>.</p>
+							</div>
+						</div>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
 						<ul class="tsd-type-parameters">
 							<li>
@@ -1309,6 +1407,55 @@ img { max-width: 100%; }
 				</ul>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
+				<a name="frompromise" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagStatic">Static</span> from<wbr>Promise</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
+					<li class="tsd-signature tsd-kind-icon">from<wbr>Promise&lt;E, T&gt;<span class="tsd-signature-symbol">(</span>fn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_task_.task.html" class="tsd-signature-type">Task</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">E</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/fd49ba6/src/Task.ts#L33">Task.ts:33</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Converts a function that returns a Promise into a Task.</p>
+							</div>
+						</div>
+						<h4 class="tsd-type-parameters-title">Type parameters</h4>
+						<ul class="tsd-type-parameters">
+							<li>
+								<h4>E</h4>
+							</li>
+							<li>
+								<h4>T</h4>
+							</li>
+						</ul>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>fn: <span class="tsd-signature-type">function</span></h5>
+								<ul class="tsd-parameters">
+									<li class="tsd-parameter-siganture">
+										<ul class="tsd-signatures tsd-kind-type-literal">
+											<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+										</ul>
+										<ul class="tsd-descriptions">
+											<li class="tsd-description">
+												<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <a href="_task_.task.html" class="tsd-signature-type">Task</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">E</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
 				<a name="succeed" class="tsd-anchor"></a>
 				<h3><span class="tsd-flag ts-flagStatic">Static</span> succeed</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
@@ -1318,9 +1465,14 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/1f8bc66/src/Task.ts#L12">Task.ts:12</a></li>
+								<li>Defined in <a href="https://github.com/kofno/taskarian/blob/fd49ba6/src/Task.ts#L13">Task.ts:13</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>A Task that is always successful. Resolves to <code>t</code>.</p>
+							</div>
+						</div>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
 						<ul class="tsd-type-parameters">
 							<li>
