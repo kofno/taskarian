@@ -1,6 +1,6 @@
 {
   "name": "taskarian",
-  "version": "1.2.0",
+  "version": "0.0.0-development",
   "description": "A future implementation in TypeScript",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -14,7 +14,8 @@
     "docs": "typedoc --out docs --theme minimal && touch docs/.nojekyll",
     "test": "ts-node node_modules/tape/bin/tape tests/**/*.ts | tap-spec",
     "build": "tsc",
-    "watch": "tsc -w"
+    "watch": "tsc -w",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "devDependencies": {
     "@types/tape": "^4.2.29",
@@ -23,6 +24,7 @@
     "ts-node": "^3.0.2",
     "tslint": "^5.1.0",
     "typedoc": "^0.5.10",
-    "typescript": "^2.3.2"
+    "typescript": "^2.3.2",
+    "semantic-release": "^8.0.3"
   }
 }
