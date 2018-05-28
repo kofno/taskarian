@@ -116,6 +116,30 @@ class Task<E, T> {
       return this.fn((e: E) => reject(f(e)), t => resolve(t));
     });
   }
+
+  /**
+   * Assign encapsulates a pattern of building up an object (or a scope) from
+   * a series of Task results. Without `assign`, you would need to nest a series
+   * of `andThen` calls to build a shared javascript scope if you needs to
+   * combine results. That pattern can become indistinguishable from callback
+   * hell. Using `assign`, you can flatten out your call chain, while maintaining
+   * type safety.
+   *
+   * The idea and the base implementation came from this blog post:
+   * https://medium.com/@dhruvrajvanshi/simulating-haskells-do-notation-in-typescript-e48a9501751c
+   */
+  public assign<K extends string, A>(
+    k: K,
+    other: Task<E, A> | ((t: T) => Task<E, A>)
+  ): Task<E, T & { [k in K]: A }> {
+    return this.andThen(t => {
+      const task = other instanceof Task ? other : other(t);
+      return task.map<T & { [k in K]: A }>(a => ({
+        ...Object(t),
+        [k.toString()]: a,
+      }));
+    });
+  }
 }
 
 export default Task;

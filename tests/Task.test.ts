@@ -9,7 +9,7 @@ const cancellable = new Task((reject, resolve: Resolve<string>) => {
 test('Task.succeed', t => {
   Task.succeed(42).fork(
     _ => t.fail('Task 42 should always succeed'),
-    v => t.pass(`Task always succeeds with ${v}`),
+    v => t.pass(`Task always succeeds with ${v}`)
   );
   t.end();
 });
@@ -17,7 +17,7 @@ test('Task.succeed', t => {
 test('Task.fail', t => {
   Task.fail('Ooops!').fork(
     err => t.pass(`Task always fails with ${err}`),
-    _ => t.fail('Task should always fail'),
+    _ => t.fail('Task should always fail')
   );
   t.end();
 });
@@ -27,7 +27,7 @@ test('Task.map', t => {
     .map(v => v - 12)
     .fork(
       _ => t.fail('Task should always succeed'),
-      result => t.pass(`Task succeeded with ${result}`),
+      result => t.pass(`Task succeeded with ${result}`)
     );
 
   Task.fail('Opps!')
@@ -62,7 +62,7 @@ test('Task.orElse', t => {
     .orElse(e => Task.succeed(e))
     .fork(
       err => t.fail('Task should have become a success'),
-      v => t.pass(`Task succeeded with ${v}`),
+      v => t.pass(`Task succeeded with ${v}`)
     );
 
   Task.succeed(42)
@@ -77,7 +77,7 @@ test('Task.mapError', t => {
     .mapError(e => e.toUpperCase())
     .fork(
       err => t.equal('OOPS!', err, `Task failed with ${err}`),
-      _ => t.fail('Task should have failed'),
+      _ => t.fail('Task should have failed')
     );
 
   t.end();
@@ -86,7 +86,7 @@ test('Task.mapError', t => {
 test('Cancel task', t => {
   const cancel = cancellable.fork(
     err => t.fail(`Task should not have failed; ${err}`),
-    v => t.fail(`Task should never have finished; ${v}`),
+    v => t.fail(`Task should never have finished; ${v}`)
   );
   cancel();
 
@@ -98,7 +98,7 @@ test('Cancel mapped task', t => {
 
   const cancel = task.fork(
     err => t.fail(`Task should not have failed; ${err}`),
-    s => t.fail(`Task should never have finished; ${s}`),
+    s => t.fail(`Task should never have finished; ${s}`)
   );
   cancel();
 
@@ -112,12 +112,12 @@ test('Cancel sequenced tasks', t => {
         resolve(s.toUpperCase());
         // tslint:disable-next-line:no-empty
         return () => {};
-      }),
+      })
   );
 
   const cancel = task.fork(
     err => t.fail(`Task should not have failed; ${err}`),
-    s => t.fail(`Task should never have finished; ${s}`),
+    s => t.fail(`Task should never have finished; ${s}`)
   );
   cancel();
 
@@ -130,12 +130,12 @@ test('Cancel sequenced asynced tasks', t => {
       new Task((reject, resolve) => {
         const x = setTimeout(() => resolve(s.toUpperCase()), 3000);
         return () => clearTimeout(x);
-      }),
+      })
   );
 
   const cancel = task.fork(
     err => t.fail(`Task should not have failed; ${err}`),
-    s => t.fail(`Task should never have finished; ${s}`),
+    s => t.fail(`Task should never have finished; ${s}`)
   );
   cancel();
 
@@ -147,28 +147,49 @@ test('Promises', t => {
     .map(n => n + 8)
     .fork(
       err => t.fail(`Task should have succeeded: ${err}`),
-      n => t.assert(n === 50, 'Promise converted to task'),
+      n => t.assert(n === 50, 'Promise converted to task')
     );
 
   Task.fromPromise(() => Promise.reject<number>('whoops!'))
     .map(n => n + 8)
     .fork(
       err => t.pass(`Task handled a failed promise. Error: ${err}`),
-      n => t.fail(`Task should not have succeeded: ${n}`),
+      n => t.fail(`Task should not have succeeded: ${n}`)
     );
 
   Task.succeed(42)
     .andThenP(n => Promise.resolve(n + 8))
     .fork(
       err => t.fail(`Promise should have resolved as a successful task: ${err}`),
-      n => t.assert(50 === n, 'Promise chained as a task'),
+      n => t.assert(50 === n, 'Promise chained as a task')
     );
 
   Task.succeed(42)
     .andThenP(n => Promise.reject('Whoops!'))
     .fork(
       err => t.pass(`Promise failure chained as task. Error ${err}`),
-      n => t.fail(`Promise chain should not have succeeded: ${n}`),
+      n => t.fail(`Promise chain should not have succeeded: ${n}`)
+    );
+
+  t.end();
+});
+
+test('Task.assign', t => {
+  Task.succeed({})
+    .assign('x', Task.succeed(42))
+    .assign('y', Task.succeed(8))
+    .assign('z', s => Task.succeed(String(s.x + s.y)))
+    .fork(
+      m => t.fail(`Should have succeeded: ${m}`),
+      value => t.deepEqual(value, { x: 42, y: 8, z: '50' })
+    );
+  Task.succeed({})
+    .assign('x', Task.succeed(42))
+    .assign('y', Task.fail<string, number>('Ooops!'))
+    .assign('z', s => Task.succeed(String(s.x + s.y)))
+    .fork(
+      m => t.pass(`Expected a failure: ${m}`),
+      value => t.fail(`Expected a failure: ${JSON.stringify(value)}`)
     );
 
   t.end();
