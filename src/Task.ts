@@ -1,3 +1,5 @@
+import { resolve } from 'url';
+
 export type Reject<E> = (err: E) => void;
 export type Resolve<T> = (t: T) => void;
 export type Cancel = () => void;
@@ -33,6 +35,68 @@ class Task<E, T> {
   public static fromPromise<E, T>(fn: () => Promise<T>): Task<E, T> {
     return new Task((reject, resolve) => {
       fn().then(resolve, reject);
+      return noop;
+    });
+  }
+
+  /**
+   * Creates a new task that will run a series of tasks in parallel. If any
+   * of the tasks reject, then all other results are discarded. If all tasks
+   * resolve, then the an array of results is returned.
+   *
+   * This is comparable to Promise.all
+   *
+   * Implementation is based on https://github.com/futurize/parallel-future
+   */
+  public static all<E, T>(ts: Array<Task<E, T>>): Task<E, T[]> {
+    const length = ts.length;
+    if (length === 0) {
+      return Task.succeed([]);
+    }
+
+    return new Task((reject, resolve) => {
+      let resolved = 0;
+      const results: T[] = [];
+      const resolveIdx = (idx: number) => (result: T) => {
+        resolved = resolved + 1;
+        results[idx] = result;
+        if (resolved === length) {
+          resolve(results);
+        }
+      };
+      for (let i = 0; i < length; i++) {
+        ts[i].fork(reject, resolveIdx(i));
+      }
+      return noop;
+    });
+  }
+
+  /**
+   * Creates a new Task from an Array of Tasks. When forked, all tasks are
+   * forked in parallel. The first task to complete (either rejected or resolved)
+   * is preserved. All other results are discarded.
+   *
+   * This could be used for a simple timeout mechanism. If the timeout rejects
+   * before the fetch completes, you'll get a timeout error.
+   *
+   *     new Task([longFetchTask, timeoutTask])
+   */
+  public static race<T, E>(ts: Array<Task<E, T>>): Task<E, T> {
+    if (ts.length === 0) {
+      return new Task((reject, resolve) => noop);
+    }
+
+    return new Task((reject, resolve) => {
+      let resolved = false;
+      const resolveIf = (result: T) => {
+        if (!resolved) {
+          resolved = true;
+          resolve(result);
+        }
+      };
+      for (let i = 0; i < ts.length; i++) {
+        ts[i].fork(reject, resolveIf);
+      }
       return noop;
     });
   }
