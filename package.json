@@ -19,13 +19,13 @@
   },
   "devDependencies": {
     "@types/tape": "^4.2.29",
+    "semantic-release": "^8.0.3",
     "tap-spec": "^4.1.1",
     "tape": "^4.6.3",
     "ts-node": "^3.0.2",
     "tslint": "^5.1.0",
     "typedoc": "^0.11.0",
-    "typescript": "^2.3.2",
-    "semantic-release": "^8.0.3"
+    "typescript": "^2.3.2"
   },
   "prettier": {
     "singleQuote": true,

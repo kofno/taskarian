@@ -1,5 +1,3 @@
-import { resolve } from 'url';
-
 export type Reject<E> = (err: E) => void;
 export type Resolve<T> = (t: T) => void;
 export type Cancel = () => void;
@@ -194,7 +192,7 @@ class Task<E, T> {
    */
   public assign<K extends string, A>(
     k: K,
-    other: Task<E, A> | ((t: T) => Task<E, A>)
+    other: Task<E, A> | ((t: T) => Task<E, A>),
   ): Task<E, T & { [k in K]: A }> {
     return this.andThen(t => {
       const task = other instanceof Task ? other : other(t);
@@ -202,6 +200,25 @@ class Task<E, T> {
         ...Object(t),
         [k.toString()]: a,
       }));
+    });
+  }
+
+  /**
+   * Inject a side-effectual function into a task call chain. Task themselves are the
+   * appropriate way to handle side-effects that you care about, but sometimes you
+   * may want to do an _fire-and-forget_ side effect. The most common example of this
+   * is performing a logging the current value of a Task.
+   *
+   *     Task.succeed('hi')
+   *       .do(v => console.log(v))
+   *       .andThen(doSomethingWithGreeting)
+   *
+   * `do` will only run in the context of a successful task.
+   */
+  public do(fn: (a: T) => void): Task<E, T> {
+    return this.map(v => {
+      fn(v);
+      return v;
     });
   }
 }
