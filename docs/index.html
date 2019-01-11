@@ -947,8 +947,7 @@ img { max-width: 100%; }
 parse(<span class="hljs-string">'foo'</span>).fork(
   <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err</span>) </span>{ <span class="hljs-built_in">console</span>.error(err) },
   <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">value</span>) </span>{ <span class="hljs-built_in">console</span>.log(value) }
-);
-</code></pre><p>It is also possible to cancel a task, if the task supports it:</p>
+);</code></pre><p>It is also possible to cancel a task, if the task supports it:</p>
 			<pre><code><span class="hljs-keyword">import</span> Task, { Resolve } <span class="hljs-keyword">from</span> <span class="hljs-string">'taskarian'</span>;
 
 <span class="hljs-keyword">const</span> cancellable = <span class="hljs-keyword">new</span> Task(<span class="hljs-function">(<span class="hljs-params">reject, resolve: Resolve&lt;<span class="hljs-built_in">string</span>&gt;</span>) =&gt;</span> {
@@ -961,8 +960,7 @@ parse(<span class="hljs-string">'foo'</span>).fork(
   <span class="hljs-function"><span class="hljs-params">s</span> =&gt;</span> <span class="hljs-built_in">console</span>.warn(<span class="hljs-string">`Task should never have finished; <span class="hljs-subst">${s}</span>`</span>),
 );
 
-cancel();
-</code></pre><h1 id="docs">docs</h1>
+cancel();</code></pre><h1 id="docs">docs</h1>
 			<p><a href="https://kofno.github.io/taskarian">API</a></p>
 		</div>
 		<div style="position:relative;"><a name="typedoc-main-index" class="tsd-anchor"></a></div>
