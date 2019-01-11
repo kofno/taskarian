@@ -92,10 +92,39 @@ class Task<E, T> {
           resolve(result);
         }
       };
+      // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < ts.length; i++) {
         ts[i].fork(reject, resolveIf);
       }
       return noop;
+    });
+  }
+
+  /**
+   * `loop` returns a higher-order task forks the "inner" task until the inner task
+   * succeeds. Retries forking the task on the interval number the same as using
+   * setTimeout.
+   *
+   * The cancel function returned when the loop is forked can be called to cancel the
+   * loop. Cancelling the loop causes the task to never resolve.
+   */
+  public static loop<E, T>(interval: number, task: Task<E, T>): Task<never, T> {
+    return new Task<never, T>((_, resolve) => {
+      let timeout: number | undefined;
+      const loop = () => {
+        task.fork(
+          () => {
+            timeout = window.setTimeout(loop, interval);
+          },
+          result => resolve(result)
+        );
+      };
+
+      loop();
+
+      return () => {
+        clearTimeout(timeout);
+      };
     });
   }
 
@@ -192,7 +221,7 @@ class Task<E, T> {
    */
   public assign<K extends string, A>(
     k: K,
-    other: Task<E, A> | ((t: T) => Task<E, A>),
+    other: Task<E, A> | ((t: T) => Task<E, A>)
   ): Task<E, T & { [k in K]: A }> {
     return this.andThen(t => {
       const task = other instanceof Task ? other : other(t);
