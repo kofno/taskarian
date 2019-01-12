@@ -110,11 +110,11 @@ class Task<E, T> {
    */
   public static loop<E, T>(interval: number, task: Task<E, T>): Task<never, T> {
     return new Task<never, T>((_, resolve) => {
-      let timeout: number | undefined;
+      let timeout: any;
       const loop = () => {
         task.fork(
           () => {
-            timeout = window.setTimeout(loop, interval);
+            timeout = setTimeout(loop, interval);
           },
           result => resolve(result)
         );
