@@ -86,17 +86,23 @@ class Task<E, T> {
 
     return new Task((reject, resolve) => {
       let resolved = false;
+      const cancels: Array<() => void> = [];
+
       const resolveIf = (result: T) => {
         if (!resolved) {
           resolved = true;
           resolve(result);
+          cancels.forEach(fn => fn());
         }
       };
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < ts.length; i++) {
-        ts[i].fork(reject, resolveIf);
+        cancels.push(ts[i].fork(reject, resolveIf));
       }
-      return noop;
+
+      return () => {
+        cancels.forEach(fn => fn());
+      };
     });
   }
 
