@@ -159,7 +159,10 @@ class Task<E, T> {
    */
   public map<A>(f: (t: T) => A): Task<E, A> {
     return new Task((reject, resolve) => {
-      return this.fn(err => reject(err), (a: T) => resolve(f(a)));
+      return this.fn(
+        err => reject(err),
+        (a: T) => resolve(f(a))
+      );
     });
   }
 
@@ -168,7 +171,10 @@ class Task<E, T> {
    */
   public andThen<A>(f: (t: T) => Task<E, A>): Task<E, A> {
     return new Task((reject, resolve) => {
-      return this.fn(err => reject(err), (a: T) => f(a).fork(reject, resolve));
+      return this.fn(
+        err => reject(err),
+        (a: T) => f(a).fork(reject, resolve)
+      );
     });
   }
 
@@ -192,7 +198,10 @@ class Task<E, T> {
    */
   public andThenP<A>(f: (t: T) => Promise<A>): Task<E, A> {
     return new Task((reject, resolve) => {
-      return this.fn(err => reject(err), (a: T) => f(a).then(resolve, reject));
+      return this.fn(
+        err => reject(err),
+        (a: T) => f(a).then(resolve, reject)
+      );
     });
   }
 
@@ -201,7 +210,10 @@ class Task<E, T> {
    */
   public orElse<X>(f: (err: E) => Task<X, T>): Task<X, T> {
     return new Task((reject, resolve) => {
-      return this.fn((x: E) => f(x).fork(reject, resolve), t => resolve(t));
+      return this.fn(
+        (x: E) => f(x).fork(reject, resolve),
+        t => resolve(t)
+      );
     });
   }
 
@@ -210,7 +222,10 @@ class Task<E, T> {
    */
   public mapError<X>(f: (err: E) => X): Task<X, T> {
     return new Task((reject, resolve) => {
-      return this.fn((e: E) => reject(f(e)), t => resolve(t));
+      return this.fn(
+        (e: E) => reject(f(e)),
+        t => resolve(t)
+      );
     });
   }
 
@@ -254,6 +269,25 @@ class Task<E, T> {
     return this.map(v => {
       fn(v);
       return v;
+    });
+  }
+
+  /**
+   * Inject a side-effectual function into a task call chain. Task themselves are the
+   * appropriate way to handle side-effects that you care about, but sometimes you
+   * may want to do an _fire-and-forget_ side effect. The most common example of this
+   * is performing a logging the current value of a Task.
+   *
+   *     Task.fail('oops')
+   *       .elseDo(v => console.log(v))
+   *       .orElse(doSomethingWithError)
+   *
+   * `elseDo` will only run in the context of a failed task.
+   */
+  public elseDo(fn: (err: E) => void): Task<E, T> {
+    return this.mapError(err => {
+      fn(err);
+      return err;
     });
   }
 }
