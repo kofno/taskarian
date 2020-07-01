@@ -92,7 +92,7 @@ class Task<E, T> {
         if (!resolved) {
           resolved = true;
           resolve(result);
-          cancels.forEach(fn => fn());
+          cancels.forEach((fn) => fn());
         }
       };
       // tslint:disable-next-line:prefer-for-of
@@ -101,7 +101,7 @@ class Task<E, T> {
       }
 
       return () => {
-        cancels.forEach(fn => fn());
+        cancels.forEach((fn) => fn());
       };
     });
   }
@@ -122,7 +122,7 @@ class Task<E, T> {
           () => {
             timeout = setTimeout(loop, interval);
           },
-          result => resolve(result)
+          (result) => resolve(result)
         );
       };
 
@@ -132,6 +132,27 @@ class Task<E, T> {
         clearTimeout(timeout);
       };
     });
+  }
+
+  public static run<E, T>(gen: IterableIterator<Task<E, T>>): Task<E, T> {
+    let result: IteratorResult<Task<E, T>> = gen.next();
+    let returnValue: Task<E, T>;
+    while (true) {
+      if (result.done) {
+        return result.value;
+      }
+      returnValue = new Task<E, T>((reject, resolve) => {
+        result.value
+          .do((v: any) => {
+            result = gen.next(v);
+          })
+          .fork(
+            (err: E) => reject(err),
+            (v: T) => resolve(v)
+          );
+        return noop;
+      });
+    }
   }
 
   private fn: Computation<E, T>;
@@ -155,12 +176,25 @@ class Task<E, T> {
   }
 
   /**
+   * Run the task wrapped in a Promise and return the Promise. Once a task is
+   * resolved as a Promise, the Promise API is used to interact with it.
+   *
+   * Each time `resolve` is called on a Task, a new Promise is generated. All
+   * of the side-effects of executing the Task will fire.
+   */
+  public resolve(): Promise<T> {
+    return new Promise((resolve, reject) => {
+      this.fn(reject, resolve);
+    });
+  }
+
+  /**
    * Execute a function in the context of a successful task
    */
   public map<A>(f: (t: T) => A): Task<E, A> {
     return new Task((reject, resolve) => {
       return this.fn(
-        err => reject(err),
+        (err) => reject(err),
         (a: T) => resolve(f(a))
       );
     });
@@ -172,7 +206,7 @@ class Task<E, T> {
   public andThen<A>(f: (t: T) => Task<E, A>): Task<E, A> {
     return new Task((reject, resolve) => {
       return this.fn(
-        err => reject(err),
+        (err) => reject(err),
         (a: T) => f(a).fork(reject, resolve)
       );
     });
@@ -199,7 +233,7 @@ class Task<E, T> {
   public andThenP<A>(f: (t: T) => Promise<A>): Task<E, A> {
     return new Task((reject, resolve) => {
       return this.fn(
-        err => reject(err),
+        (err) => reject(err),
         (a: T) => f(a).then(resolve, reject)
       );
     });
@@ -212,7 +246,7 @@ class Task<E, T> {
     return new Task((reject, resolve) => {
       return this.fn(
         (x: E) => f(x).fork(reject, resolve),
-        t => resolve(t)
+        (t) => resolve(t)
       );
     });
   }
@@ -224,7 +258,7 @@ class Task<E, T> {
     return new Task((reject, resolve) => {
       return this.fn(
         (e: E) => reject(f(e)),
-        t => resolve(t)
+        (t) => resolve(t)
       );
     });
   }
@@ -244,9 +278,9 @@ class Task<E, T> {
     k: K,
     other: Task<E, A> | ((t: T) => Task<E, A>)
   ): Task<E, T & { [k in K]: A }> {
-    return this.andThen(t => {
+    return this.andThen((t) => {
       const task = other instanceof Task ? other : other(t);
-      return task.map<T & { [k in K]: A }>(a => ({
+      return task.map<T & { [k in K]: A }>((a) => ({
         ...Object(t),
         [k.toString()]: a,
       }));
@@ -266,7 +300,7 @@ class Task<E, T> {
    * `do` will only run in the context of a successful task.
    */
   public do(fn: (a: T) => void): Task<E, T> {
-    return this.map(v => {
+    return this.map((v) => {
       fn(v);
       return v;
     });
@@ -285,7 +319,7 @@ class Task<E, T> {
    * `elseDo` will only run in the context of a failed task.
    */
   public elseDo(fn: (err: E) => void): Task<E, T> {
-    return this.mapError(err => {
+    return this.mapError((err) => {
       fn(err);
       return err;
     });
