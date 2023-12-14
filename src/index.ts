@@ -1,4 +1,5 @@
-import Task from './Task';
+import Task from "./Task.ts";
 
-export * from './Task';
+export * from './Task.ts';
+
 export default Task;
