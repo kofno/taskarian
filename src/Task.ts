@@ -27,7 +27,8 @@ export class Task<E, T> {
   }
 
   /**
-   * Converts a function that returns a Promise into a Task.
+   * Converts a function that returns a Promise into a Task. Promise based tasks
+   * can't be cancelled.
    */
   public static fromPromise<E, T>(fn: () => Promise<T>): Task<E, T> {
     return new Task((reject, resolve) => {
@@ -54,17 +55,21 @@ export class Task<E, T> {
     return new Task((reject, resolve) => {
       let resolved = 0;
       const results: T[] = [];
+      const cancels: Record<number, Cancel> = {};
       const resolveIdx = (idx: number) => (result: T) => {
         resolved = resolved + 1;
         results[idx] = result;
+        cancels[idx] = noop;
         if (resolved === length) {
           resolve(results);
         }
       };
       for (let i = 0; i < length; i++) {
-        ts[i].fork(reject, resolveIdx(i));
+        cancels[i] = ts[i].fork(reject, resolveIdx(i));
       }
-      return noop;
+      return () => {
+        Object.entries(cancels).forEach(([_, cancel]) => cancel());
+      };
     });
   }
 
@@ -164,8 +169,9 @@ export class Task<E, T> {
   public static loop<E, T>(interval: number, task: Task<E, T>): Task<never, T> {
     return new Task<never, T>((_, resolve) => {
       let timeout: ReturnType<typeof setTimeout> | undefined;
+      let internalCancel: Cancel | undefined;
       const loop = () => {
-        task.fork(
+        internalCancel = task.fork(
           () => {
             timeout = setTimeout(loop, interval);
           },
@@ -177,6 +183,7 @@ export class Task<E, T> {
 
       return () => {
         clearTimeout(timeout);
+        internalCancel && internalCancel();
       };
     });
   }
@@ -238,10 +245,22 @@ export class Task<E, T> {
    */
   public andThen<A>(f: (t: T) => Task<E, A>): Task<E, A> {
     return new Task((reject, resolve) => {
-      return this.fn(
+      let innerCancel: Cancel | undefined;
+
+      const outerCancel = this.fn(
         (err) => reject(err),
-        (a: T) => f(a).fork(reject, resolve)
+        (a: T) => {
+          innerCancel = f(a).fork(reject, resolve);
+        }
       );
+
+      return () => {
+        if (innerCancel) {
+          innerCancel();
+        } else {
+          outerCancel();
+        }
+      };
     });
   }
 
@@ -277,10 +296,20 @@ export class Task<E, T> {
    */
   public orElse<X>(f: (err: E) => Task<X, T>): Task<X, T> {
     return new Task((reject, resolve) => {
-      return this.fn(
-        (x: E) => f(x).fork(reject, resolve),
+      let innerCancel: Cancel | undefined;
+      const outerCancel = this.fn(
+        (x: E) => {
+          innerCancel = f(x).fork(reject, resolve);
+        },
         (t) => resolve(t)
       );
+      return () => {
+        if (innerCancel) {
+          innerCancel();
+        } else {
+          outerCancel();
+        }
+      };
     });
   }
 
@@ -358,5 +387,3 @@ export class Task<E, T> {
     });
   }
 }
-
-export default Task;

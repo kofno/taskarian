@@ -2,7 +2,7 @@ import { assert } from "https://deno.land/std@0.209.0/assert/assert.ts";
 import { assertEquals } from "https://deno.land/std@0.209.0/assert/assert_equals.ts";
 import { assertObjectMatch } from "https://deno.land/std@0.209.0/assert/assert_object_match.ts";
 import { Reject, Resolve } from "./Task.ts";
-import Task from './index.ts';
+import { Task } from './index.ts';
 
 const cancellable = new Task<never, string>((_reject: Reject<never>, resolve: Resolve<string>) => {
   const x = setTimeout(() => resolve('Yo!'), 3000);
