@@ -1,17 +1,16 @@
+import { always, fromEmpty, noop } from './deps.ts';
+
 export type Reject<E> = (err: E) => void;
 export type Resolve<T> = (t: T) => void;
 export type Cancel = () => void;
 export type Computation<E, T> = (reject: Reject<E>, resolve: Resolve<T>) => Cancel;
 
-// tslint:disable-next-line:no-empty
-const noop = (): void => {};
-
-class Task<E, T> {
+export class Task<E, T> {
   /**
    * A Task that is always successful. Resolves to `t`.
    */
   public static succeed<E, T>(t: T): Task<E, T> {
-    return new Task((reject: Reject<E>, resolve: Resolve<T>) => {
+    return new Task((_reject: Reject<E>, resolve: Resolve<T>) => {
       resolve(t);
       return noop;
     });
@@ -21,7 +20,7 @@ class Task<E, T> {
    * A Task that always fails. Rejects with `err`.
    */
   public static fail<E, T>(err: E): Task<E, T> {
-    return new Task((reject, resolve) => {
+    return new Task((reject, _resolve) => {
       reject(err);
       return noop;
     });
@@ -79,30 +78,78 @@ class Task<E, T> {
    *
    *     new Task([longFetchTask, timeoutTask])
    */
-  public static race<T, E>(ts: Array<Task<E, T>>): Task<E, T> {
-    if (ts.length === 0) {
-      return new Task((reject, resolve) => noop);
-    }
+  public static race<E, T>(tasks: ReadonlyArray<Task<E, T>>): Task<E, T> {
+    type Status = 'waiting' | 'resolved' | 'rejected';
 
-    return new Task((reject, resolve) => {
-      let resolved = false;
-      const cancels: Array<() => void> = [];
+    return fromEmpty(tasks).cata({
+      Nothing: () => new Task<E, T>(always(noop)),
+      Just: () =>
+        new Task<E, T>((reject, resolve) => {
+          let status: Status = 'waiting';
+          const cancels: Array<Cancel> = [];
 
-      const resolveIf = (result: T) => {
-        if (!resolved) {
-          resolved = true;
-          resolve(result);
-          cancels.forEach((fn) => fn());
-        }
-      };
-      // tslint:disable-next-line:prefer-for-of
-      for (let i = 0; i < ts.length; i++) {
-        cancels.push(ts[i].fork(reject, resolveIf));
-      }
+          const cancelAll = (): void => {
+            let cancel: Cancel | undefined;
+            while ((cancel = cancels.shift())) cancel();
+          };
 
-      return () => {
-        cancels.forEach((fn) => fn());
-      };
+          const cancelAllIfNotStillWaiting = (): void => {
+            switch (status) {
+              case 'waiting':
+                break;
+              case 'rejected':
+              case 'resolved':
+                cancelAll();
+                break;
+            }
+          };
+
+          const resolveAndCancelAll = (t: T): void => {
+            switch (status) {
+              case 'waiting':
+                status = 'resolved';
+                resolve(t);
+                cancelAll();
+                break;
+              case 'resolved':
+              case 'rejected':
+                break;
+            }
+          };
+          const rejectAndCancelAll = (e: E): void => {
+            switch (status) {
+              case 'waiting':
+                status = 'rejected';
+                reject(e);
+                cancelAll();
+                break;
+              case 'resolved':
+              case 'rejected':
+                break;
+            }
+          };
+
+          const forkTaskIfStillWaiting = (task: Task<E, T>): void => {
+            switch (status) {
+              case 'waiting': {
+                const cancel = task.fork(rejectAndCancelAll, resolveAndCancelAll);
+                cancels.push(cancel);
+                break;
+              }
+              case 'rejected':
+              case 'resolved':
+                break;
+            }
+          };
+
+          for (let i = 0; i < tasks.length; i++) {
+            forkTaskIfStillWaiting(tasks[i]);
+          }
+
+          cancelAllIfNotStillWaiting();
+
+          return () => cancelAll();
+        }),
     });
   }
 
@@ -116,7 +163,7 @@ class Task<E, T> {
    */
   public static loop<E, T>(interval: number, task: Task<E, T>): Task<never, T> {
     return new Task<never, T>((_, resolve) => {
-      let timeout: any;
+      let timeout: ReturnType<typeof setTimeout> | undefined;
       const loop = () => {
         task.fork(
           () => {
@@ -132,27 +179,6 @@ class Task<E, T> {
         clearTimeout(timeout);
       };
     });
-  }
-
-  public static run<E, T>(gen: IterableIterator<Task<E, T>>): Task<E, T> {
-    let result: IteratorResult<Task<E, T>> = gen.next();
-    let returnValue: Task<E, T>;
-    while (true) {
-      if (result.done) {
-        return result.value;
-      }
-      returnValue = new Task<E, T>((reject, resolve) => {
-        result.value
-          .do((v: any) => {
-            result = gen.next(v);
-          })
-          .fork(
-            (err: E) => reject(err),
-            (v: T) => resolve(v)
-          );
-        return noop;
-      });
-    }
   }
 
   private fn: Computation<E, T>;
@@ -198,6 +224,13 @@ class Task<E, T> {
         (a: T) => resolve(f(a))
       );
     });
+  }
+
+  /**
+   * An alias for `map`
+   */
+  public and<A>(f: (t: T) => A): Task<E, A> {
+    return this.map(f);
   }
 
   /**

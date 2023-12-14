@@ -1,6 +1,3 @@
-# Moved
-This project is now maintained at [festive-possum](https://github.com/kofno/festive-possum/tree/main/packages/taskarian)
-
 # taskarian
 
 [![Build Status](https://travis-ci.org/kofno/taskarian.svg?branch=master)](https://travis-ci.org/kofno/taskarian)
@@ -55,7 +52,3 @@ It is also possible to cancel a task, if the task supports it:
     );
 
     cancel();
-
-# docs
-
-[API](https://kofno.github.io/taskarian)
