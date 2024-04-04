@@ -341,7 +341,7 @@ export class Task<E, T> {
     other: Task<E, A> | ((t: T) => Task<E, A>)
   ): Task<E, T & { [k in K]: A }> {
     return this.andThen((t) => {
-      const task = other instanceof Task ? other : other(t);
+      const task = typeof other === 'function' ? other(t) : other;
       return task.map<T & { [k in K]: A }>((a) => ({
         ...Object(t),
         [k.toString()]: a,
