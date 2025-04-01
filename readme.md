@@ -153,26 +153,30 @@ mappedTask.fork(
 ## API Reference
 
 - **Task<E, A>(computation: (reject: (error: E) => void, resolve: (value: A) => void) => (() => void) | void)**: The Task constructor.
-  - **computation**: A function that takes reject and resolve callbacks. It can optionally return a cancellation function.
-- **fork(reject: (error: E) => void, resolve: (value: A) => void): () => void**: Executes the task.
-  - **reject**: A function to handle task rejection.
-  - **resolve**: A function to handle task resolution.
+  - **computation:** A function that takes reject and resolve callbacks. It can optionally return a cancellation function.
+- **fork(reject: (error: E) => void, resolve: (value: A) => void): () => void:**
+  Executes the task.
+
+  - **reject:** A function to handle task rejection.
+  - **resolve:** A function to handle task resolution.
   - Returns a cancellation function (if provided by the task).
-- **map<B>(f: (a: A) => B): Task<E, B>**: Transforms the resolved value of the task.
-- **and<B>(f: (a: A) => B): Task<E, B>**: Transforms the resolved value of the task. This is a shorthand for map.
-- **andThen<B>(f: (a: A) => Task<E, B>): Task<E, B>**: Chains another task to be executed after the current task resolves.
-- **andThenP<B>(f: (a: A) => Promise<B>): Task<E, B>**: Chains a promise to be executed after the current task resolves.
-- **orElse<X>(f: (err: E) => Task<X, T>): Task<X, T>**: Provides a fallback mechanism for a Task in case of failure.
-- **mapError<X>(f: (err: E) => X): Task<X, T>**: Transforms the error value of the Task using the provided mapping function.
-- **assign<K extends string, A>(k: K, other: Task<E, A> | ((t: T) => Task<E, A>)): Task<E, T & { [k in K]: A }>**: Assigns a new property to the result of the current task by combining it with another task or a function that produces a task.
-- **do(fn: (a: T) => void): Task<E, T>**: Executes a provided function fn with the value of the task when it resolves, and returns a new task with the same value.
-- **elseDo(fn: (err: E) => void): Task<E, T>**: Executes a provided function if the task encounters an error.
-- **static succeed<E, T>(t: T): Task<E, T>**: Creates a Task that immediately succeeds with the provided value.
-- **static fail<E, T>(err: E): Task<E, T>**: Creates a Task that immediately fails with the provided error.
-- **static fromPromise<E, T>(fn: () => Promise<T>): Task<E, T>**: Creates a Task from a function that returns a Promise.
-- **static all<E, T>(ts: Array<Task<E, T>>): Task<E, T[]>**: Combines an array of Task instances into a single Task that resolves with an array of results when all the input tasks succeed, or rejects if any of the input tasks fail.
-- **static race<E, T>(tasks: ReadonlyArray<Task<E, T>>): Task<E, T>**: Creates a Task that races the provided array of tasks and resolves or rejects with the result of the first task to complete (either resolve or reject).
-- **static loop<E, T>(interval: number, task: Task<E, T>): Task<E, T>**: Creates a looping task that repeatedly executes the given task at a specified interval.
+
+- **map<B>(f: (a: A) => B): Task<E, B>:** Transforms the resolved value of the task.
+
+- **and<B>(f: (a: A) => B): Task<E, B>:** Transforms the resolved value of the task. This is a shorthand for map.
+- **andThen<B>(f: (a: A) => Task<E, B>): Task<E, B>:** Chains another task to be executed after the current task resolves.
+- **andThenP<B>(f: (a: A) => Promise<B>): Task<E, B>:** Chains a promise to be executed after the current task resolves.
+- **orElse<X>(f: (err: E) => Task<X, T>): Task<X, T>:** Provides a fallback mechanism for a Task in case of failure.
+- **mapError<X>(f: (err: E) => X): Task<X, T>:** Transforms the error value of the Task using the provided mapping function.
+- **assign<K extends string, A>(k: K, other: Task<E, A> | ((t: T) => Task<E, A>)): Task<E, T & { [k in K]: A }>:** Assigns a new property to the result of the current task by combining it with another task or a function that produces a task.
+- **do(fn: (a: T) => void): Task<E, T>:** Executes a provided function fn with the value of the task when it resolves, and returns a new task with the same value.
+- **elseDo(fn: (err: E) => void): Task<E, T>:** Executes a provided function if the task encounters an error.
+- **static succeed<E, T>(t: T): Task<E, T>:** Creates a Task that immediately succeeds with the provided value.
+- **static fail<E, T>(err: E): Task<E, T>:** Creates a Task that immediately fails with the provided error.
+- **static fromPromise<E, T>(fn: () => Promise<T>): Task<E, T>:** Creates a Task from a function that returns a Promise.
+- **static all<E, T>(ts: Array<Task<E, T>>): Task<E, T[]>:** Combines an array of Task instances into a single Task that resolves with an array of results when all the input tasks succeed, or rejects if any of the input tasks fail.
+- **static race<E, T>(tasks: ReadonlyArray<Task<E, T>>): Task<E, T>:** Creates a Task that races the provided array of tasks and resolves or rejects with the result of the first task to complete (either resolve or reject).
+- **static loop<E, T>(interval: number, task: Task<E, T>): Task<E, T>:** Creates a looping task that repeatedly executes the given task at a specified interval.
 
 ## Contributing
 
