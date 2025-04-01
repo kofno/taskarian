@@ -1,6 +1,6 @@
 {
   "name": "taskarian",
-  "version": "6.1.0",
+  "version": "7.0.0",
   "description": "A TypeScript library for building robust and composable asynchronous workflows. It leverages the power of lazy evaluation and the monad pattern to simplify the management of tasks, promises, and other asynchronous operations. With taskarian, you can define complex workflows as a series of composable steps, deferring execution until the result is needed. This approach leads to cleaner, more maintainable code, improved error handling, and enhanced code readability.",
   "repository": {
     "type": "git",
