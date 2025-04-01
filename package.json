@@ -1,6 +1,6 @@
 {
   "name": "taskarian",
-  "version": "7.0.0",
+  "version": "7.0.1",
   "description": "A TypeScript library for building robust and composable asynchronous workflows. It leverages the power of lazy evaluation and the monad pattern to simplify the management of tasks, promises, and other asynchronous operations. With taskarian, you can define complex workflows as a series of composable steps, deferring execution until the result is needed. This approach leads to cleaner, more maintainable code, improved error handling, and enhanced code readability.",
   "repository": {
     "type": "git",
@@ -10,11 +10,30 @@
   "bugs": {
     "url": "https://github.com/kofno/taskarian/issues"
   },
-  "module": "src/index.ts",
+  "module": "dist/index.js",
+  "main": "dist/index.cjs",
+  "types": "dist/index.d.ts",
   "type": "module",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "build:watch": "tsup --watch"
+  },
   "devDependencies": {
     "@types/bun": "latest",
-    "prettier": "^3.5.3"
+    "prettier": "^3.5.3",
+    "tsup": "^8.4.0"
   },
   "peerDependencies": {
     "typescript": "^5"
