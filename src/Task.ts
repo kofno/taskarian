@@ -1,9 +1,13 @@
-import { always, fromEmpty, noop } from './deps.ts';
+import { noop } from '@kofno/piper';
+import { fromEmpty } from 'maybeasy';
 
 export type Reject<E> = (err: E) => void;
 export type Resolve<T> = (t: T) => void;
 export type Cancel = () => void;
-export type Computation<E, T> = (reject: Reject<E>, resolve: Resolve<T>) => Cancel;
+export type Computation<E, T> = (
+  reject: Reject<E>,
+  resolve: Resolve<T>
+) => Cancel;
 
 export class Task<E, T> {
   /**
@@ -54,6 +58,7 @@ export class Task<E, T> {
 
     return new Task((reject, resolve) => {
       let resolved = 0;
+      const tasks = ts; // avoid mutation of the original array
       const results: T[] = [];
       const cancels: Record<number, Cancel> = {};
       const resolveIdx = (idx: number) => (result: T) => {
@@ -64,9 +69,9 @@ export class Task<E, T> {
           resolve(results);
         }
       };
-      for (let i = 0; i < length; i++) {
-        cancels[i] = ts[i].fork(reject, resolveIdx(i));
-      }
+      tasks.forEach((task, index) => {
+        cancels[index] = task.fork(reject, resolveIdx(index));
+      });
       return () => {
         Object.entries(cancels).forEach(([_, cancel]) => cancel());
       };
@@ -87,7 +92,10 @@ export class Task<E, T> {
     type Status = 'waiting' | 'resolved' | 'rejected';
 
     return fromEmpty(tasks).cata({
-      Nothing: () => new Task<E, T>(always(noop)),
+      Nothing: () =>
+        new Task<E, T>((_reject, _resolve) => {
+          return noop;
+        }),
       Just: () =>
         new Task<E, T>((reject, resolve) => {
           let status: Status = 'waiting';
@@ -137,7 +145,10 @@ export class Task<E, T> {
           const forkTaskIfStillWaiting = (task: Task<E, T>): void => {
             switch (status) {
               case 'waiting': {
-                const cancel = task.fork(rejectAndCancelAll, resolveAndCancelAll);
+                const cancel = task.fork(
+                  rejectAndCancelAll,
+                  resolveAndCancelAll
+                );
                 cancels.push(cancel);
                 break;
               }
@@ -147,9 +158,13 @@ export class Task<E, T> {
             }
           };
 
-          for (let i = 0; i < tasks.length; i++) {
-            forkTaskIfStillWaiting(tasks[i]);
-          }
+          // Fork all tasks in parallel
+          // This ensures that all tasks are forked even if one of them
+          // resolves or rejects before the others. This is important to
+          // ensure that all tasks are cancelled if one resolves or rejects.
+          tasks.forEach((task) => {
+            forkTaskIfStillWaiting(task);
+          });
 
           cancelAllIfNotStillWaiting();
 
@@ -164,24 +179,38 @@ export class Task<E, T> {
    * setTimeout.
    *
    * The cancel function returned when the loop is forked can be called to cancel the
-   * loop. Cancelling the loop causes the task to never resolve.
+   * loop. Cancelling the loop causes the task to reject.
    */
-  public static loop<E, T>(interval: number, task: Task<E, T>): Task<never, T> {
-    return new Task<never, T>((_, resolve) => {
+  public static loop<E, T>(interval: number, task: Task<E, T>): Task<E, T> {
+    return new Task<E, T>((_, resolve) => {
       let timeout: ReturnType<typeof setTimeout> | undefined;
       let internalCancel: Cancel | undefined;
+      let isCancelled = false;
+
       const loop = () => {
+        if (isCancelled) {
+          return;
+        }
         internalCancel = task.fork(
-          () => {
+          (err) => {
+            if (isCancelled) {
+              return;
+            }
             timeout = setTimeout(loop, interval);
           },
-          (result) => resolve(result)
+          (result) => {
+            if (isCancelled) {
+              return;
+            }
+            resolve(result);
+          }
         );
       };
 
       loop();
 
       return () => {
+        isCancelled = true;
         clearTimeout(timeout);
         internalCancel && internalCancel();
       };
